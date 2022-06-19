@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ch">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>子域名设置 - |简·陋|网站配置快捷工具</title>
+	<script type="text/javascript" src="/wwwroot/js/scpo-webreq.js"></script>
+	<link rel="stylesheet" type="text/css" href="../common.css" />
+	<style>
+		ul {
+			list-style: none;
+		}
+
+		span,
+		input {
+			background: #272822;
+			font-family: "Ubuntu Mono", Menlo, Monaco, "Courier New", monospace;
+			display: inline-block;
+		}
+
+		.s-i {
+			color: #E6DB74;
+		}
+
+		.s-d {
+			color: #66D9EF;
+		}
+
+		li,
+		input,
+		button {
+			font-size: large;
+		}
+
+		li {
+			white-space: pre;
+			line-height: 1.5em;
+			margin-top: 0.3em;
+			left: 1.5em;
+		}
+
+		input {
+			width: 20em;
+			color: #F8F8F2;
+			padding: 0.2em;
+		}
+
+		.func {
+			padding: 0.2em;
+			padding-left: 1em;
+			padding-right: 1em;
+		}
+
+		.del {
+			position: absolute;
+			left: -2em;
+		}
+	</style>
+</head>
+
+<body>
+	<form onsubmit="return save(), false;">
+		<ul id="hlist"></ul>
+		<br />
+		<button class="func" type="button" onclick="add()">添加规则</button>
+		<button class="func" type="submit">保存</button>
+	</form>
+	<script type="text/javascript">
+		"use strict";
+		var list;
+		function add() {
+			var dmn = prompt("请输入域名");
+			if (!dmn) return;
+			list[dmn] = "";
+			lpush(dmn, "");
+		}
+		function lpush(name, value) {
+			var li = document.createElement("li");
+			li.id = name;
+			li.innerHTML = '<button type="button" class="del" onclick="ldel(\'' + name + '\')"> ✕ </button>'
+				+ '<span class="s-d"> ' + name + ' </span>\n'
+				+ '<span class="s-i"> To: </span> <input oninput="sett(\'' + name + '\', this)" value="' + value + '" />';
+			hlist.appendChild(li);
+		}
+		function ldel(n) {
+			delete list[n];
+			hlist.removeChild(document.getElementById(n));
+		}
+		function sett(name, node) {
+			list[name] = node.value;
+		}
+		ScpoWR.fget("list.json").then(function (data) {
+			list = JSON.parse(data);
+			for (var i in list) lpush(i, list[i]);
+		});
+		function save() {
+			ScpoWR.get("set.php", JSON.stringify(list), function (data) {
+				if (!data) alert("成功！！！");
+			});
+		}
+	</script>
+</body>
+
+</html>
