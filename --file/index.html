@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ch">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>网站配置快捷工具 - |简·陋|</title>
+	<link rel="stylesheet" type="text/css" href="common.css" />
+	<script type="text/javascript" src="scpo-webreq.js"></script>
+</head>
+
+<body>
+	<h1>|简·陋|</h1>
+	<h2>网站配置快捷工具</h2>
+	<br />
+	<ul id="ulist"></ul>
+	<script type="text/javascript">
+		"use strict";
+		var list;
+		function dolist() {
+			var i, li;
+			for (i in list) {
+				li = document.createElement("li");
+				li.innerHTML = '<li><a href="' + i + '/">' + (list[i] ? list[i] : i) + '</a></li>';
+				ulist.appendChild(li);
+			}
+		}
+		ScpoWR.fget('list.php').then(function (data) {
+			list = JSON.parse(data);
+			dolist();
+		});
+	</script>
+</body>
+
+</html>
