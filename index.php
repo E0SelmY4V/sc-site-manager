@@ -2,6 +2,7 @@
 
 // ver: 1.0.20220619-0
 
+require 'cache.php';
 require 'url.php';
 require 'errpage.php';
 
@@ -38,10 +39,12 @@ switch (true) {
 		$_SERVER['QUERY_STRING'] = $qry;
 		parse_str($qry, $_GET);
 		chdir(substr($file, 0, strrpos($file, '/') + 1));
-		break;
+		include($file);
+		die();
 	case substr_compare($file, '/', -1, 1) === 0:
 		$file .= 'index.html';
 	default:
 		if (!file_exists($file)) ScpoPHP\Errpage::die(404);
 }
+ScpoPHP\Cache::t_file($file);
 include($file);
