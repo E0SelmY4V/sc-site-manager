@@ -2,8 +2,8 @@
 
 // ver: 1.0.20220619-0
 
-require '../scpo-php/url.php';
-require '../scpo-php/errpage.php';
+require 'url.php';
+require 'errpage.php';
 
 /**用户数组 */
 const USER = array(
