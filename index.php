@@ -5,11 +5,7 @@
 require 'cache.php';
 require 'url.php';
 require 'errpage.php';
-
-/**用户数组 */
-const USER = array(
-	'admin' => '123456'
-);
+require 'config.php';
 
 session_start();
 
