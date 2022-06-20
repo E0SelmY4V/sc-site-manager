@@ -5,6 +5,11 @@ function diff($bag, $check)
 	foreach ($bag as $key => $value) if (!isset($check[$key]) || array_diff_assoc($value, $check[$key])) $rs[$key] = $value;
 	return $rs;
 }
+file_put_contents('../cfg/host.conf', '
+<VirtualHost *:' . PORT . '>
+	DocumentRoot ' . ROOT . '
+</VirtualHost>
+');
 $old_list = json_decode(file_get_contents('list.json'), true);
 file_put_contents('list.json', $new_list = urldecode($_SERVER['QUERY_STRING']));
 $new_list = json_decode($new_list, true);
