@@ -9,4 +9,4 @@ const USER = array(
 const PORT = 8081;
 
 /**默认根目录 */
-const ROOT = '/mnt/';
+const ROOT = '/mnt';

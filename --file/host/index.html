@@ -11,17 +11,24 @@
 	<style>
 		ul {
 			list-style: none;
+			margin-left: 2em;
 		}
 
 		span,
 		input {
+			font-size: larger;
 			background: #272822;
 			font-family: "Ubuntu Mono", Menlo, Monaco, "Courier New", monospace;
 			display: inline-block;
 		}
 
 		.s-i {
+			font-size: large;
 			color: #E6DB74;
+		}
+
+		.s-r {
+			color: #F92772;
 		}
 
 		.s-d {
@@ -38,7 +45,6 @@
 			white-space: pre;
 			line-height: 1.5em;
 			margin-top: 0.3em;
-			left: 1.5em;
 		}
 
 		input {
@@ -47,59 +53,88 @@
 			padding: 0.2em;
 		}
 
-		.func {
+		.btn-main {
 			padding: 0.2em;
 			padding-left: 1em;
 			padding-right: 1em;
 		}
 
-		.del {
+		.btn-func {
 			position: absolute;
 			left: -2em;
+			font-size: 0.5cm;
+		}
+
+		.btn-s_insert {
+			width: 4em;
+			text-align: center;
+			left: 1em;
 		}
 	</style>
-</head>
-
-<body>
-	<form onsubmit="return save(), false;">
-		<ul id="hlist"></ul>
-		<br />
-		<button class="func" type="button" onclick="add()">添加规则</button>
-		<button class="func" type="submit">保存</button>
-	</form>
 	<script type="text/javascript">
 		"use strict";
-		var list;
-		function add() {
-			var dmn = prompt("请输入域名");
-			if (!dmn) return;
-			list[dmn] = "";
-			lpush(dmn, "");
-		}
-		function lpush(name, value) {
+		var list, idCut = "~=#{分割符}#=~";
+		function l_insert(dmn, info) {
+			if (!dmn) {
+				dmn = prompt("请输入域名");
+				if (!dmn) return;
+				if (typeof list[dmn] != "undefined") return alert("您已经添加过了");
+				info = list[dmn] = { DocumentRoot: "" };
+			}
 			var li = document.createElement("li");
-			li.id = name;
-			li.innerHTML = '<button type="button" class="del" onclick="ldel(\'' + name + '\')"> ✕ </button>'
-				+ '<span class="s-d"> ' + name + ' </span>\n'
-				+ '<span class="s-i"> To: </span> <input oninput="sett(\'' + name + '\', this)" value="' + value + '" />';
+			li.id = dmn;
+			li.innerHTML = '<button type="button" class="btn-func" onclick="l_delete(\'' + dmn + '\')"> × </button>'
+				+ '<span class="s-r"> Domain: </span> <span class="s-d"> ' + dmn + ' </span>\n<ul></ul>'
+				+ '<button type="button" class="btn-func btn-s_insert" onclick="s_insert(\'' + dmn + '\')"> + </button>\n';
 			hlist.appendChild(li);
+			for (var i in info) s_insert(dmn, i, info[i]);
 		}
-		function ldel(n) {
-			delete list[n];
-			hlist.removeChild(document.getElementById(n));
+		function l_delete(dmn) {
+			delete list[dmn];
+			hlist.removeChild(document.getElementById(dmn));
 		}
-		function sett(name, node) {
-			list[name] = node.value;
+		function s_insert(dmn, key, value) {
+			if (!key) {
+				key = prompt("请输入规则");
+				if (!key) return;
+				if (typeof list[dmn][key] != "undefined") return alert("您已经添加过了");
+				value = list[dmn][key] = "";
+			}
+			var li = document.createElement("li");
+			li.id = dmn + idCut + key;
+			li.innerHTML = '<button type="button" class="btn-func" onclick="s_delete(\'' + dmn + '\', \'' + key + '\')"> × </button>'
+				+ '<span class="s-i"> ' + key + ' </span> '
+				+ '<input value="' + value + '" oninput="window.list[\'' + dmn + '\'][\'' + key + '\'] = this.value;" />';
+			document.getElementById(dmn)
+				.getElementsByTagName("ul")[0]
+				.appendChild(li);
+
 		}
-		ScpoWR.fget("list.json").then(function (data) {
-			list = JSON.parse(data);
-			for (var i in list) lpush(i, list[i]);
-		});
+		function s_delete(dmn, key) {
+			delete list[dmn][key];
+			document.getElementById(dmn)
+				.getElementsByTagName("ul")[0]
+				.removeChild(document.getElementById(dmn + idCut + key));
+		}
 		function save() {
 			ScpoWR.get("set.php", JSON.stringify(list), function (data) {
 				if (!data) alert("成功！！！");
 			});
 		}
+	</script>
+</head>
+
+<body>
+	<form onsubmit="return save(), false;">
+		<ul id="hlist"></ul><br />
+		<button class="btn-main" type="button" onclick="l_insert()">添加域名</button>
+		<button class="btn-main" type="submit">保存</button>
+	</form>
+	<script type="text/javascript">
+		ScpoWR.fget("list.json").then(function (data) {
+			list = JSON.parse(data);
+			for (var i in list) l_insert(i, list[i]);
+		});
 	</script>
 </body>
 
