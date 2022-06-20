@@ -84,7 +84,7 @@
 			var li = document.createElement("li");
 			li.id = dmn;
 			li.innerHTML = '<button type="button" class="btn-func" onclick="l_delete(\'' + dmn + '\')"> × </button>'
-				+ '<span class="s-r"> Domain: </span> <span class="s-d"> ' + dmn + ' </span>\n<ul></ul>'
+				+ '<span class="s-r"> ServerName </span> <span class="s-d"> ' + dmn + ' </span>\n<ul></ul>'
 				+ '<button type="button" class="btn-func btn-s_insert" onclick="s_insert(\'' + dmn + '\')"> + </button>\n';
 			hlist.appendChild(li);
 			for (var i in info) s_insert(dmn, i, info[i]);
