@@ -7,7 +7,7 @@ function diff($bag, $check)
 }
 file_put_contents('../cfg/host.conf', '
 <VirtualHost *:' . PORT . '>
-	DocumentRoot ' . ROOT . '
+	DocumentRoot ' . ROOT . F_HOST['DEF_DIR'] . '
 </VirtualHost>
 ');
 $old_list = json_decode(file_get_contents('list.json'), true);
@@ -18,5 +18,6 @@ foreach (diff($new_list, $old_list) as $dmn => $info) {
 	$text = '<VirtualHost *:' . PORT . ">\n\tServerName $dmn";
 	foreach ($info as $key => $value) $text .= "\n\t$key " . ($key === 'DocumentRoot' ? ROOT : '') . $value;
 	$text .= "\n</VirtualHost>";
+	$text .= F_HOST['ADDI'];
 	file_put_contents("../cfg/host-$dmn.conf", $text);
 }
