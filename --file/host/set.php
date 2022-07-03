@@ -17,7 +17,7 @@ foreach (diff($old_list, $new_list) as $dmn => $info) unlink("../cfg/host-$dmn.c
 foreach (diff($new_list, $old_list) as $dmn => $info) {
 	$text = '<VirtualHost *:' . PORT . ">\n\tServerName $dmn";
 	foreach ($info as $key => $value) $text .= "\n\t$key " . ($key === 'DocumentRoot' ? ROOT : '') . $value;
-	$text .= "\n</VirtualHost>";
 	$text .= F_HOST['ADDI'];
+	$text .= "\n</VirtualHost>";
 	file_put_contents("../cfg/host-$dmn.conf", $text);
 }
