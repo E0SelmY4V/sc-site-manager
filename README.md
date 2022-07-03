@@ -23,7 +23,7 @@ Through this tool, you can:
 - manage sub domain
 
 To use this tool, you need:
-1. clone this repository to your website. For example, if your website is `/var/www`, you can clone to `/var/www/manager`.
+1. clone this repository to your website. For example, if your website is `/var/www`, you can clone it to `/var/www/manager`.
 2. Rename `config.default.php` to `config.php` and configure it.
 3. Add a command like `IncludeOptional /var/www/manager/--file/cfg/*.conf` to apache.conf to include all the configuration file in `--file/`.
-4. There is one thing need attention : do not visit in folder (For example, `www.xxx.com/manager` is in folder, `manager.xxx.com` is not). Then you can visit your website to manage.
+4. There is one thing need to attention : do not visit this web tool in folder (For example, `www.xxx.com/manager` is in folder, `manager.xxx.com` is not). Then you can visit your website to manage happily.
